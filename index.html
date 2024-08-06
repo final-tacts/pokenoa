@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ainoa's Pixel Pokemon Love</title>
+    <style>
+        @font-face {
+            font-family: 'Pokemon GB';
+            src: url('https://cdn.jsdelivr.net/npm/pokemon-font@1.8.1/fonts/pokemon-font.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Pokemon GB', monospace;
+            background-color: #9bbc0f;
+            color: #0f380f;
+            line-height: 1.6;
+            padding: 8px;
+            image-rendering: pixelated;
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+        }
+
+        .game-boy {
+            max-width: 320px;
+            margin: 20px auto;
+            background-color: #8bac0f;
+            border: 8px solid #306230;
+            padding: 16px;
+            box-shadow: 
+                inset -4px -4px 0 0 #0f380f,
+                inset 4px 4px 0 0 #9bbc0f;
+        }
+
+        h1, h2 {
+            color: #0f380f;
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        p {
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pokemon-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 16px;
+        }
+
+        .pokemon {
+            width: 56px;
+            height: 56px;
+            background-color: #306230;
+            border: 4px solid #0f380f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pokemon img {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        #game-container {
+            background-color: #9bbc0f;
+            border: 4px solid #0f380f;
+            padding: 8px;
+            margin-top: 16px;
+        }
+
+        button {
+            font-family: 'Pokemon GB', monospace;
+            background-color: #8bac0f;
+            color: #0f380f;
+            border: 4px solid #306230;
+            padding: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 8px auto;
+            font-size: 12px;
+        }
+
+        button:active {
+            background-color: #306230;
+        }
+
+        #result {
+            min-height: 32px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .love-meter {
+            width: 100%;
+            height: 16px;
+            background-color: #0f380f;
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .love-fill {
+            height: 100%;
+            background-color: #306230;
+            width: 0%;
+            transition: width 0.25s;
+        }
+
+        .pixel-heart {
+            font-size: 16px;
+            color: #0f380f;
+        }
+
+        .ainoa-message {
+            font-size: 12px;
+            color: #0f380f;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .message-container {
+            white-space: pre-wrap;
+            font-size: 12px;
+            color: #0f380f;
+            text-align: center;
+            border: 4px solid #0f380f;
+            padding: 16px;
+            margin-top: 16px;
+            width: 90%;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .message-text {
+            display: inline-block;
+            white-space: pre-wrap;
+            overflow: hidden;
+            max-width: 100%;
+            animation: typing 3s steps(40, end) 1s forwards, blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: #0f380f;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .game-boy {
+                border-width: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-boy">
+        <h1>AINOA'S POKEMON LOVE</h1>
+
+        <div class="pokemon-container">
+            <div class="pokemon" id="pokemon1"></div>
+            <div class="pokemon" id="pokemon2"></div>
+            <div class="pokemon" id="pokemon3"></div>
+            <div class="pokemon" id="pokemon4"></div>
+        </div>
+
+        <p>LOVE IN THE POKEMON WORLD IS LIKE A RARE CANDY - IT MAKES EVERYONE GROW!</p>
+
+        <div id="game-container">
+            <h2>CATCH THE LOVE!</h2>
+            <button id="catch-btn">CATCH!</button>
+            <p id="result"></p>
+            <div class="love-meter">
+                <div class="love-fill"></div>
+            </div>
+        </div>
+
+        <p class="ainoa-message">MADE WITH <span class="pixel-heart">♥</span> FOR AINOA</p>
+    </div>
+
+    <script>
+        const catchBtn = document.getElementById('catch-btn');
+        const result = document.getElementById('result');
+        const loveFill = document.querySelector('.love-fill');
+        const pokemonList = [
+            { name: 'PIKACHU', sprite: 'sprites/pikachu-gmax.png' },
+            { name: 'SYLVEON', sprite: 'sprites/sylveon.png' },
+            { name: 'CHARIZARD', sprite: 'sprites/charizard.png' },
+            { name: 'ALAKAZAM', sprite: 'sprites/alakazam.png' },
+            { name: 'GENGAR', sprite: 'sprites/gengar.png' },
+            { name: 'SCYTHER', sprite: 'sprites/scyther.png' },
+            { name: 'SNORLAX', sprite: 'sprites/snorlax.png' },
+            { name: 'DELIBIRD', sprite: 'sprites/delibird.png' },
+            { name: 'BLISSEY', sprite: 'sprites/blissey.png' }
+        ];
+        let loveLevel = 0;
+        let caughtPokemon = [];
+
+        catchBtn.addEventListener('click', () => {
+            if (caughtPokemon.length >= 4) {
+                result.textContent = "AINOA'S LOVE IS MAXED OUT! I LOVE YOU AINOA!";
+                setTimeout(showApologyMessage, 2000);
+                return;
+            }
+
+            let randomIndex;
+            let randomPokemon;
+            do {
+                randomIndex = Math.floor(Math.random() * pokemonList.length);
+                randomPokemon = pokemonList[randomIndex];
+            } while (caughtPokemon.includes(randomPokemon.name));
+
+            caughtPokemon.push(randomPokemon.name);
+            result.textContent = `YOU CAUGHT ${randomPokemon.name}! AINOA'S HEART GROWS!`;
+
+            const pokemonBox = document.getElementById(`pokemon${caughtPokemon.length}`);
+            const img = document.createElement('img');
+            img.src = randomPokemon.sprite;
+            pokemonBox.appendChild(img);
+
+            loveLevel += 25;  // 4 Pokémon should fill the love bar completely
+            if (loveLevel > 100) loveLevel = 100;
+            loveFill.style.width = `${loveLevel}%`;
+
+            if (caughtPokemon.length === 4) {
+                result.textContent = "AINOA'S LOVE IS MAXED OUT! YOU'RE A LOVE MASTER!";
+                setTimeout(showApologyMessage, 2000);
+            }
+        });
+
+        function showApologyMessage() {
+            if (document.querySelector('.message-container')) return;
+
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('message-container');
+
+            const messageText = document.createElement('div');
+            messageText.classList.add('message-text');
+
+            const apologyMessage = `
+Dear Ainoa,
+
+I am truly sorry for all the hurt and pain I have caused you.
+
+My actions were thoughtless and selfish, and I deeply regret them.
+
+You mean the world to me, and I hope you can find it in your heart to forgive me.
+
+Our love is like a rare candy; it makes us stronger and helps us grow.
+
+Please forgive me, Ainoa.
+
+With all my love,
+Rashid
+            `;
+
+            messageText.textContent = apologyMessage;
+            messageContainer.appendChild(messageText);
+            document.body.appendChild(messageContainer);
+        }
+    </script>
+</body>
+</html>
